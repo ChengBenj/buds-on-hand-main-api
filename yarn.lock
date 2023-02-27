@@ -783,6 +783,23 @@
     consola "^2.15.0"
     node-fetch "^2.6.1"
 
+"@prisma/client@^4.10.1":
+  version "4.10.1"
+  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-4.10.1.tgz#c47fd54661ee74b174cee63e9dc418ecf57a6ccd"
+  integrity sha512-VonXLJZybdt8e5XZH5vnIGCRNnIh6OMX1FS3H/yzMGLT3STj5TJ/OkMcednrvELgk8PK89Vo3aSh51MWNO0axA==
+  dependencies:
+    "@prisma/engines-version" "4.10.1-2.aead147aa326ccb985dcfed5b065b4fdabd44b19"
+
+"@prisma/engines-version@4.10.1-2.aead147aa326ccb985dcfed5b065b4fdabd44b19":
+  version "4.10.1-2.aead147aa326ccb985dcfed5b065b4fdabd44b19"
+  resolved "https://registry.yarnpkg.com/@prisma/engines-version/-/engines-version-4.10.1-2.aead147aa326ccb985dcfed5b065b4fdabd44b19.tgz#312359d9d00e39e323136d0270876293d315658e"
+  integrity sha512-tsjTho7laDhf9EJ9EnDxAPEf7yrigSMDhniXeU4YoWc7azHAs4GPxRi2P9LTFonmHkJLMOLjR77J1oIP8Ife1w==
+
+"@prisma/engines@4.10.1":
+  version "4.10.1"
+  resolved "https://registry.yarnpkg.com/@prisma/engines/-/engines-4.10.1.tgz#c7062747f254e5d5fce98a8cae566c25f9f29fb2"
+  integrity sha512-B3tcTxjx196nuAu1GOTKO9cGPUgTFHYRdkPkTS4m5ptb2cejyBlH9X7GOfSt3xlI7p4zAJDshJP4JJivCg9ouA==
+
 "@sinclair/typebox@^0.25.16":
   version "0.25.24"
   resolved "https://registry.yarnpkg.com/@sinclair/typebox/-/typebox-0.25.24.tgz#8c7688559979f7079aacaf31aa881c3aa410b718"
@@ -3787,6 +3804,13 @@ pretty-format@^29.0.0, pretty-format@^29.4.3:
     ansi-styles "^5.0.0"
     react-is "^18.0.0"
 
+prisma@^4.10.1:
+  version "4.10.1"
+  resolved "https://registry.yarnpkg.com/prisma/-/prisma-4.10.1.tgz#88084695d7b364ae6bebf93d5006f84439c4e7d1"
+  integrity sha512-0jDxgg+DruB1kHVNlcspXQB9au62IFfVg9drkhzXudszHNUAQn0lVuu+T8np0uC2z1nKD5S3qPeCyR8u5YFLnA==
+  dependencies:
+    "@prisma/engines" "4.10.1"
+
 process-nextick-args@~2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/process-nextick-args/-/process-nextick-args-2.0.1.tgz#7820d9b16120cc55ca9ae7792680ae7dba6d7fe2"
@@ -4726,3 +4750,8 @@ yocto-queue@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
+
+zod@^3.20.6:
+  version "3.20.6"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-3.20.6.tgz#2f2f08ff81291d47d99e86140fedb4e0db08361a"
+  integrity sha512-oyu0m54SGCtzh6EClBVqDDlAYRz4jrVtKwQ7ZnsEmMI9HnzuZFj8QFwAY1M5uniIYACdGvv0PBWPF2kO0aNofA==
