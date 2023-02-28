@@ -1,7 +1,8 @@
 name: CI
 on:
   pull_request:
-    types: [created, edited]
+    types:
+      - synchronize
 
 jobs:
   test:
