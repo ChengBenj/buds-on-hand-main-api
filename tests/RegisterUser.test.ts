@@ -1,13 +1,18 @@
-import RegisterUserUseCase from '../src/domain/auth/useCases/RegisterUser';
+import { RegisterUserBody } from 'domain/auth/dtos/RegisterUserBody';
+import RegisterUserUseCase from 'domain/auth/useCases/RegisterUser';
 
-import UserRepositoryMemory from '../src/domain/auth/repositories/userRepositoryMemory';
+import UserRepositoryMemory from 'repositories/userRepositoryMemory';
 
-import { RegisterUserBody } from '../src/domain/auth/dtos/RegisterUserBody';
+import HashingBcryptService from 'services/hashing/bcrypt.service';
 
 describe('Register User', () => {
   it('Should register user and send register verify email', async () => {
     const userRepository = new UserRepositoryMemory();
-    const registerUserUseCase = new RegisterUserUseCase(userRepository);
+    const hashingBcryptService = new HashingBcryptService();
+    const registerUserUseCase = new RegisterUserUseCase(
+      userRepository,
+      hashingBcryptService,
+    );
 
     const body: RegisterUserBody = {
       name: 'Benjamin Cheng',
@@ -20,7 +25,11 @@ describe('Register User', () => {
 
   it('Should throw error when given a duplicate email', async () => {
     const userRepository = new UserRepositoryMemory();
-    const registerUserUseCase = new RegisterUserUseCase(userRepository);
+    const hashingBcryptService = new HashingBcryptService();
+    const registerUserUseCase = new RegisterUserUseCase(
+      userRepository,
+      hashingBcryptService,
+    );
 
     const body: RegisterUserBody = {
       name: 'Benjamin Cheng',
@@ -43,7 +52,11 @@ describe('Register User', () => {
 
   it('Should throw error when email is not valid', () => {
     const userRepository = new UserRepositoryMemory();
-    const registerUserUseCase = new RegisterUserUseCase(userRepository);
+    const hashingBcryptService = new HashingBcryptService();
+    const registerUserUseCase = new RegisterUserUseCase(
+      userRepository,
+      hashingBcryptService,
+    );
 
     const body: RegisterUserBody = {
       name: 'Benjamin Cheng',
@@ -58,7 +71,11 @@ describe('Register User', () => {
 
   it('Should throw error when send empty fields', () => {
     const userRepository = new UserRepositoryMemory();
-    const registerUserUseCase = new RegisterUserUseCase(userRepository);
+    const hashingBcryptService = new HashingBcryptService();
+    const registerUserUseCase = new RegisterUserUseCase(
+      userRepository,
+      hashingBcryptService,
+    );
 
     const noNameBody: RegisterUserBody = {
       name: undefined,
@@ -93,7 +110,11 @@ describe('Register User', () => {
 
   it('Should throw error when send empty fields', () => {
     const userRepository = new UserRepositoryMemory();
-    const registerUserUseCase = new RegisterUserUseCase(userRepository);
+    const hashingBcryptService = new HashingBcryptService();
+    const registerUserUseCase = new RegisterUserUseCase(
+      userRepository,
+      hashingBcryptService,
+    );
 
     const shortPasswordBody: RegisterUserBody = {
       name: 'Benjamin Cheng',

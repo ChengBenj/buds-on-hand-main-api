@@ -1,5 +1,4 @@
 import {
-  BadGatewayException,
   CallHandler,
   ExecutionContext,
   HttpException,
@@ -7,11 +6,11 @@ import {
   Injectable,
   NestInterceptor,
 } from '@nestjs/common';
-import { catchError, map, Observable, throwError } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { z } from 'zod';
 
 @Injectable()
-export default class ErrorHandleingInterceptor implements NestInterceptor {
+export default class HttpInterceptorService implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
       catchError((error) =>
@@ -43,6 +42,5 @@ export default class ErrorHandleingInterceptor implements NestInterceptor {
         }),
       ),
     );
-    // .pipe(map((data) => ({ data })));
   }
 }

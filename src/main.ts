@@ -1,11 +1,13 @@
 import { NestFactory } from '@nestjs/core';
+
+import HttpInterceptorService from 'services/http/http-interceptor.service';
+
 import { AppModule } from './app.module';
-import ErrorHandleingInterceptor from './infra/http/ErrorHandleingInterceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.useGlobalInterceptors(new ErrorHandleingInterceptor());
+  app.useGlobalInterceptors(new HttpInterceptorService());
 
   await app.listen(3000);
 }

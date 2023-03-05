@@ -9,7 +9,12 @@
     "target": "es2020",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./",
+    "baseUrl": ".",
+    "paths": {
+      "services/*": ["./src/services/*"],
+      "domain/*": ["./src/domain/*"],
+      "repositories/*": ["./src/repositories/*"]
+    },
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": false,
