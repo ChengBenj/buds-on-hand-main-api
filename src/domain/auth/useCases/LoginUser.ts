@@ -1,32 +1,43 @@
 import { z } from 'zod';
-import { Injectable } from '@nestjs/common';
-
-import UserRepository from 'repositories/userRepository';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 
 import HashingService from 'services/hashing/hashing.service';
 
-import { RegisterUserBody } from '../dtos/RegisterUserBody';
+import UserRepository from 'repositories/userRepository';
+
+import { LoginUserBody } from '../dtos/LoginUserBody';
 
 @Injectable()
-export default class RegisterUserUseCase {
+export default class LoginUserUseCase {
   constructor(
     private userRepository: UserRepository,
     private hashingService: HashingService,
+    private jwtService: JwtService,
   ) {}
 
-  async execute(body: RegisterUserBody) {
+  async execute(body: LoginUserBody) {
     await this.validate(body);
 
     const user = await this.userRepository.findByEmail(body.email);
 
-    if (!!user) throw new Error('This email address is already register');
+    if (!user) throw new NotFoundException('There is no user this email!');
 
-    const hashPassword = await this.hashingService.hash(body.password);
+    if (!(await this.hashingService.verify(body.password, user.password)))
+      throw new UnauthorizedException("The email or password doesn't match");
 
-    await this.userRepository.create(body.name, body.email, hashPassword);
+    delete user.password;
+
+    const token = this.jwtService.sign(user);
+
+    return token;
   }
 
-  private async validate(body: RegisterUserBody) {
+  private async validate(body: LoginUserBody) {
     const userSchema = z
       .object({
         email: z
@@ -34,9 +45,6 @@ export default class RegisterUserUseCase {
             required_error: 'Email is required',
           })
           .email({ message: 'Invalid email address' }),
-        name: z.string({
-          required_error: 'Name is required',
-        }),
         password: z
           .string({
             required_error: 'Password is required',
