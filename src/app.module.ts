@@ -1,16 +1,17 @@
 import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
-import { AuthModule } from './domain/auth/auth.module';
+import { AuthModule } from 'domain/auth/auth.module';
+import { BudgetModule } from 'domain/budget/budget.module';
 
 import JwtAuthMiddleware from './middleware/jwt-auth.middleware';
 
-import UserRepository from './repositories/userRepository';
-import UserRepositoryPrisma from './repositories/userRepositoryPrisma';
+import UserRepository from 'repositories/userRepository';
+import UserRepositoryPrisma from 'repositories/userRepositoryPrisma';
 import { PrismaService } from 'services/database/prisma.service';
 
 @Module({
-  imports: [AuthModule],
+  imports: [AuthModule, BudgetModule],
   controllers: [],
   providers: [
     JwtService,
