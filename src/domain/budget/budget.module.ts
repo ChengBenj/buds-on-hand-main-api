@@ -3,6 +3,7 @@ import BudgetRepository from 'repositories/budgetRepository';
 import BudgetRepositoryPrisma from 'repositories/budgetRepositoryPrisma';
 import { PrismaService } from 'services/database/prisma.service';
 import BudgetController from './budget.controller';
+import CreateBudgetUseCase from './useCases/CreateBudget';
 import ListBudgetsUseCase from './useCases/ListBudgets';
 
 @Module({
@@ -10,6 +11,7 @@ import ListBudgetsUseCase from './useCases/ListBudgets';
   providers: [
     PrismaService,
     ListBudgetsUseCase,
+    CreateBudgetUseCase,
     {
       provide: BudgetRepository,
       useClass: BudgetRepositoryPrisma,
