@@ -18,8 +18,6 @@ export default class JwtAuthMiddleware implements NestMiddleware {
   verifyToken(_token: string) {
     const token = _token?.replace('Bearer ', '');
 
-    console.log(token);
-
     if (!token)
       throw new NotFoundException({
         message: 'Token not informed',
@@ -45,7 +43,6 @@ export default class JwtAuthMiddleware implements NestMiddleware {
   }
 
   async use(req) {
-    console.log('Request');
     const token = this.verifyToken(req.headers?.authorization);
 
     if (!token) {

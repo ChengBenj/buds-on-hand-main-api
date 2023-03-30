@@ -9,6 +9,12 @@ import BudgetRepository from './budgetRepository';
 export default class BudgetRepositoryPrisma implements BudgetRepository {
   constructor(private prisma: PrismaService) {}
 
+  async createBudget(payload: Budget): Promise<Budget> {
+    return await this.prisma.budget.create({
+      data: payload,
+    });
+  }
+
   async listByUser(
     userId: string,
     filters?: ListUserBudgetFilter,
