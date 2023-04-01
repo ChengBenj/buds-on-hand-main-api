@@ -1,13 +1,15 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { User } from 'src/decorators/User';
 import { ListUserBudgetsQuery } from './dtos/ListUserBudgetsBody';
 import CreateBudgetUseCase from './useCases/CreateBudget';
+import GetBudgetUseCase from './useCases/GetBudget';
 import ListBudgetsUseCase from './useCases/ListBudgets';
 
 @Controller('budget')
 export default class BudgetController {
   constructor(
     private listBudgetsUseCase: ListBudgetsUseCase,
+    private getBudgetUseCase: GetBudgetUseCase,
     private createBudgetUseCase: CreateBudgetUseCase,
   ) {}
 
@@ -18,6 +20,16 @@ export default class BudgetController {
     return {
       message: 'Budgets load successfully',
       data: { budgets },
+    };
+  }
+
+  @Get('/:id')
+  public async get(@Param('id') id: string, @User() user) {
+    const budget = await this.getBudgetUseCase.execute(id, user);
+
+    return {
+      message: 'Budget load successfully',
+      data: { budget },
     };
   }
 

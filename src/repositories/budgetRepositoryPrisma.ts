@@ -15,6 +15,15 @@ export default class BudgetRepositoryPrisma implements BudgetRepository {
     });
   }
 
+  async getUserBudgetById(id: string, ownerId: string): Promise<Budget> {
+    return this.prisma.budget.findFirst({
+      where: {
+        id,
+        owner_id: ownerId,
+      },
+    });
+  }
+
   async listByUser(
     userId: string,
     filters?: ListUserBudgetFilter,
