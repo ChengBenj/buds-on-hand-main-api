@@ -10,4 +10,6 @@ export default abstract class BudgetRepository {
     userId: string,
     filters?: ListUserBudgetFilter,
   ): Promise<Array<Budget>>;
+
+  abstract deleteBudget(id: string): Promise<void>;
 }

@@ -29,12 +29,14 @@ export default class HttpInterceptorService implements NestInterceptor {
             );
           }
 
+          const httpStatusCode = error.status || HttpStatus.BAD_REQUEST;
+
           throw new HttpException(
             {
-              status: HttpStatus.BAD_REQUEST,
+              status: httpStatusCode,
               message: error.message,
             },
-            HttpStatus.BAD_REQUEST,
+            httpStatusCode,
             {
               cause: error,
             },

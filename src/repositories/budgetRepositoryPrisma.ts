@@ -57,4 +57,12 @@ export default class BudgetRepositoryPrisma implements BudgetRepository {
 
     return budgets;
   }
+
+  async deleteBudget(id: string): Promise<void> {
+    await this.prisma.budget.delete({
+      where: {
+        id,
+      },
+    });
+  }
 }
