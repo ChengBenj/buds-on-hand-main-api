@@ -8,6 +8,7 @@ import { PrismaService } from 'services/database/prisma.service';
 import BudgetController from './budget.controller';
 
 import CreateBudgetUseCase from './useCases/CreateBudget';
+import DeleteBudgetUseCase from './useCases/DeleteBudget';
 import GetBudgetUseCase from './useCases/GetBudget';
 import ListBudgetsUseCase from './useCases/ListBudgets';
 
@@ -18,6 +19,7 @@ import ListBudgetsUseCase from './useCases/ListBudgets';
     ListBudgetsUseCase,
     GetBudgetUseCase,
     CreateBudgetUseCase,
+    DeleteBudgetUseCase,
     {
       provide: BudgetRepository,
       useClass: BudgetRepositoryPrisma,
