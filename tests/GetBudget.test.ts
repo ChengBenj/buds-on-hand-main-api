@@ -25,6 +25,10 @@ describe('Get budget', () => {
     getBudgetUseCase = new GetBudgetUseCase(budgetRepository);
   });
 
+  afterAll(() => {
+    jest.clearAllMocks();
+  });
+
   it('Get user budget by id', async () => {
     const budgetMock: Budget = {
       id: '2',

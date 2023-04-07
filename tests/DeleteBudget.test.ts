@@ -24,6 +24,10 @@ describe('Delete Budget', () => {
     deleteBudgetUseCase = new DeleteBudgetUseCase(budgetRepository);
   });
 
+  afterAll(() => {
+    jest.clearAllMocks();
+  });
+
   it('Delete the budget', async () => {
     const budgetMock: Budget = {
       id: '3',

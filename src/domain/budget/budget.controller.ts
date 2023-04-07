@@ -8,13 +8,16 @@ import {
   Post,
   Query,
   HttpStatus,
+  Put,
 } from '@nestjs/common';
 import { User } from 'src/decorators/User';
 import { ListUserBudgetsQuery } from './dtos/ListUserBudgetsBody';
+import { UpdateBudgetStateBody } from './dtos/UpdateBudgetStateBody';
 import CreateBudgetUseCase from './useCases/CreateBudget';
 import DeleteBudgetUseCase from './useCases/DeleteBudget';
 import GetBudgetUseCase from './useCases/GetBudget';
 import ListBudgetsUseCase from './useCases/ListBudgets';
+import UpdateBudgetStateUseCase from './useCases/UpdateBudgetState';
 
 @Controller('budget')
 export default class BudgetController {
@@ -22,6 +25,7 @@ export default class BudgetController {
     private listBudgetsUseCase: ListBudgetsUseCase,
     private getBudgetUseCase: GetBudgetUseCase,
     private createBudgetUseCase: CreateBudgetUseCase,
+    private updateBudgetStateUseCase: UpdateBudgetStateUseCase,
     private deleteBudgetUseCase: DeleteBudgetUseCase,
   ) {}
 
@@ -52,6 +56,26 @@ export default class BudgetController {
 
     return {
       message: 'Budget created successfully',
+      data: {
+        budget,
+      },
+    };
+  }
+
+  @Put('/state/:id')
+  public async updateState(
+    @Param('id') id,
+    @Body() body: UpdateBudgetStateBody,
+    @User() user,
+  ) {
+    const budget = await this.updateBudgetStateUseCase.execute(
+      id,
+      body.state,
+      user,
+    );
+
+    return {
+      message: 'Budget state updated',
       data: {
         budget,
       },

@@ -28,6 +28,10 @@ describe('Create Budget', () => {
     createBudgetUseCase = new CreateBudgetUseCase(budgetRepository);
   });
 
+  afterAll(() => {
+    jest.clearAllMocks();
+  });
+
   it('Create bugdet with a target successfully', async () => {
     const payload: CreateBudgetBody = {
       target: 10000,
