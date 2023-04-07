@@ -26,6 +26,10 @@ describe('List User Budgets', () => {
     listBudgetsUseCase = new ListBudgetsUseCase(budgetRepository);
   });
 
+  afterAll(() => {
+    jest.clearAllMocks();
+  });
+
   it('List all budgets from user', async () => {
     const result: Array<Budget> = [
       {

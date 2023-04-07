@@ -25,6 +25,10 @@ describe('Create Budget', () => {
     updateBudgetStateUseCase = new UpdateBudgetStateUseCase(budgetRepository);
   });
 
+  afterAll(() => {
+    jest.clearAllMocks();
+  });
+
   it('Should update budget state forward successfully', async () => {
     const id = randomUUID();
     const newDate = new Date();
