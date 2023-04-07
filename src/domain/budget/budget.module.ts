@@ -7,10 +7,11 @@ import { PrismaService } from 'services/database/prisma.service';
 
 import BudgetController from './budget.controller';
 
-import CreateBudgetUseCase from './useCases/CreateBudget';
-import DeleteBudgetUseCase from './useCases/DeleteBudget';
-import GetBudgetUseCase from './useCases/GetBudget';
 import ListBudgetsUseCase from './useCases/ListBudgets';
+import GetBudgetUseCase from './useCases/GetBudget';
+import CreateBudgetUseCase from './useCases/CreateBudget';
+import UpdateBudgetStateUseCase from './useCases/UpdateBudgetState';
+import DeleteBudgetUseCase from './useCases/DeleteBudget';
 
 @Module({
   controllers: [BudgetController],
@@ -19,6 +20,7 @@ import ListBudgetsUseCase from './useCases/ListBudgets';
     ListBudgetsUseCase,
     GetBudgetUseCase,
     CreateBudgetUseCase,
+    UpdateBudgetStateUseCase,
     DeleteBudgetUseCase,
     {
       provide: BudgetRepository,

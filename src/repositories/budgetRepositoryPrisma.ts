@@ -58,6 +58,15 @@ export default class BudgetRepositoryPrisma implements BudgetRepository {
     return budgets;
   }
 
+  async updateBudget(id: string, payload: Partial<Budget>) {
+    return await this.prisma.budget.update({
+      data: payload,
+      where: {
+        id,
+      },
+    });
+  }
+
   async deleteBudget(id: string): Promise<void> {
     await this.prisma.budget.delete({
       where: {

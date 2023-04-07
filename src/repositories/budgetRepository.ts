@@ -11,5 +11,7 @@ export default abstract class BudgetRepository {
     filters?: ListUserBudgetFilter,
   ): Promise<Array<Budget>>;
 
+  abstract updateBudget(id: string, payload: Partial<Budget>): Promise<Budget>;
+
   abstract deleteBudget(id: string): Promise<void>;
 }
