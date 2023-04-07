@@ -1,44 +1,64 @@
 import { JwtService } from '@nestjs/jwt';
+import { User } from '@prisma/client';
+import { randomUUID } from 'crypto';
 
 import { LoginUserBody } from 'domain/auth/dtos/LoginUserBody';
-import { RegisterUserBody } from 'domain/auth/dtos/RegisterUserBody';
 import LoginUserUseCase from 'domain/auth/useCases/LoginUser';
-import RegisterUserUseCase from 'domain/auth/useCases/RegisterUser';
 
-import UserRepositoryMemory from 'repositories/userRepositoryMemory';
+import UserRepository from 'repositories/userRepository';
+import UserRepositoryPrisma from 'repositories/userRepositoryPrisma';
 
+import { PrismaService } from 'services/database/prisma.service';
 import HashingBcryptService from 'services/hashing/bcrypt.service';
+import HashingService from 'services/hashing/hashing.service';
 
 describe('Login User', () => {
-  it('Should login user when pass a valid email and correct password', async () => {
-    const userRepository = new UserRepositoryMemory();
-    const hashingBcryptService = new HashingBcryptService();
-    const jwtService = new JwtService({
+  let prismaService: PrismaService;
+  let hashingService: HashingService;
+  let jwtService: JwtService;
+
+  let userRepository: UserRepository;
+
+  let loginUserUseCase: LoginUserUseCase;
+
+  beforeEach(async () => {
+    hashingService = new HashingBcryptService();
+    prismaService = new PrismaService();
+    jwtService = new JwtService({
       secret: 'buds',
     });
 
-    const registerUserUseCase = new RegisterUserUseCase(
+    userRepository = new UserRepositoryPrisma(prismaService);
+
+    loginUserUseCase = new LoginUserUseCase(
       userRepository,
-      hashingBcryptService,
-    );
-
-    const registerBody: RegisterUserBody = {
-      name: 'Benjamin Cheng',
-      email: 'benjaminscalabrin@gmail.com',
-      password: '12345678',
-    };
-
-    await registerUserUseCase.execute(registerBody);
-
-    const loginUserUseCase = new LoginUserUseCase(
-      userRepository,
-      hashingBcryptService,
+      hashingService,
       jwtService,
     );
+  });
+
+  afterAll(() => {
+    jest.clearAllMocks();
+  });
+
+  it('Should login user when pass a valid email and correct password', async () => {
+    const hashPassword = await hashingService.hash('12345678');
+
+    const user: User = {
+      id: randomUUID(),
+      email: 'benjaminscalabrin@gmail.com',
+      name: 'Benjamin Cheng',
+      password: hashPassword,
+    };
+
     const body: LoginUserBody = {
       email: 'benjaminscalabrin@gmail.com',
       password: '12345678',
     };
+
+    jest
+      .spyOn(userRepository, 'findByEmail')
+      .mockImplementation(async () => user);
 
     const token = await loginUserUseCase.execute(body);
 
@@ -48,22 +68,14 @@ describe('Login User', () => {
   });
 
   it('Should throw an error when user doesnt exists', async () => {
-    const userRepository = new UserRepositoryMemory();
-    const hashingBcryptService = new HashingBcryptService();
-    const jwtService = new JwtService({
-      secret: 'buds',
-    });
-
-    const loginUserUseCase = new LoginUserUseCase(
-      userRepository,
-      hashingBcryptService,
-      jwtService,
-    );
-
     const body: LoginUserBody = {
       email: 'benjaminscalabrin@gmail.com',
       password: '12345678',
     };
+
+    jest
+      .spyOn(userRepository, 'findByEmail')
+      .mockImplementation(() => undefined);
 
     expect(() => loginUserUseCase.execute(body)).rejects.toThrowError(
       'There is no user this email!',
@@ -71,35 +83,23 @@ describe('Login User', () => {
   });
 
   it('Should throw an error when password is incorrect', async () => {
-    const userRepository = new UserRepositoryMemory();
-    const hashingBcryptService = new HashingBcryptService();
-    const jwtService = new JwtService({
-      secret: 'buds',
-    });
+    const hashPassword = await hashingService.hash('12345678');
 
-    const registerUserUseCase = new RegisterUserUseCase(
-      userRepository,
-      hashingBcryptService,
-    );
-
-    const registerBody: RegisterUserBody = {
-      name: 'Benjamin Cheng',
+    const user: User = {
+      id: randomUUID(),
       email: 'benjaminscalabrin@gmail.com',
-      password: '12345678',
+      name: 'Benjamin Cheng',
+      password: hashPassword,
     };
-
-    await registerUserUseCase.execute(registerBody);
-
-    const loginUserUseCase = new LoginUserUseCase(
-      userRepository,
-      hashingBcryptService,
-      jwtService,
-    );
 
     const body: LoginUserBody = {
       email: 'benjaminscalabrin@gmail.com',
-      password: 'abcdefgh',
+      password: '123456789',
     };
+
+    jest
+      .spyOn(userRepository, 'findByEmail')
+      .mockImplementation(async () => user);
 
     expect(() => loginUserUseCase.execute(body)).rejects.toThrowError(
       "The email or password doesn't match",
