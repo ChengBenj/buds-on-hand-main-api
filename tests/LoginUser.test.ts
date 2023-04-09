@@ -2,6 +2,8 @@ import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
 import { randomUUID } from 'crypto';
 
+import prismaServiceMock from '@mocks/services/database/prisma.service';
+
 import { LoginUserBody } from 'domain/auth/dtos/LoginUserBody';
 import LoginUserUseCase from 'domain/auth/useCases/LoginUser';
 
@@ -22,8 +24,8 @@ describe('Login User', () => {
   let loginUserUseCase: LoginUserUseCase;
 
   beforeEach(async () => {
+    prismaService = prismaServiceMock();
     hashingService = new HashingBcryptService();
-    prismaService = new PrismaService();
     jwtService = new JwtService({
       secret: 'buds',
     });

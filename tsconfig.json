@@ -11,6 +11,7 @@
     "outDir": "./dist",
     "baseUrl": ".",
     "paths": {
+      "@mocks/*": ["./src/@mocks/*"],
       "services/*": ["./src/services/*"],
       "domain/*": ["./src/domain/*"],
       "repositories/*": ["./src/repositories/*"]

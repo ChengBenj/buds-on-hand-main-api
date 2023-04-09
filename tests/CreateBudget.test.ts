@@ -1,6 +1,8 @@
 import { randomUUID } from 'node:crypto';
-import { BudgetState, User } from '@prisma/client';
+import { Budget, BudgetState, User } from '@prisma/client';
 import { Decimal } from '@prisma/client/runtime/library';
+
+import prismaServiceMock from '@mocks/services/database/prisma.service';
 
 import { CreateBudgetBody } from 'domain/budget/dtos/CreateBudgetBody';
 import CreateBudgetUseCase from 'domain/budget/useCases/CreateBudget';
@@ -23,7 +25,7 @@ describe('Create Budget', () => {
   };
 
   beforeEach(async () => {
-    prismaService = new PrismaService();
+    prismaService = prismaServiceMock();
     budgetRepository = new BudgetRepositoryPrisma(prismaService);
     createBudgetUseCase = new CreateBudgetUseCase(budgetRepository);
   });
@@ -33,21 +35,22 @@ describe('Create Budget', () => {
   });
 
   it('Create bugdet with a target successfully', async () => {
+    const mockBudget: Budget = {
+      state: BudgetState.PLANNING,
+      target: new Decimal(10000),
+      owner_id: user.id,
+      id: randomUUID(),
+      createdAt: new Date(),
+      startAt: null,
+      doneAt: null,
+    };
     const payload: CreateBudgetBody = {
       target: 10000,
     };
 
-    jest.spyOn(budgetRepository, 'createBudget').mockImplementation(async () =>
-      Promise.resolve({
-        state: BudgetState.PLANNING,
-        target: new Decimal(10000),
-        owner_id: user.id,
-        id: randomUUID(),
-        createdAt: new Date(),
-        startAt: undefined,
-        doneAt: undefined,
-      }),
-    );
+    jest
+      .spyOn(budgetRepository, 'createBudget')
+      .mockImplementation(async () => mockBudget);
 
     const budget = await createBudgetUseCase.execute(payload, user);
 
@@ -57,19 +60,20 @@ describe('Create Budget', () => {
   });
 
   it('Create bugdet without a target successfully', async () => {
+    const mockBudget: Budget = {
+      state: BudgetState.PLANNING,
+      target: undefined,
+      owner_id: user.id,
+      id: randomUUID(),
+      createdAt: new Date(),
+      startAt: undefined,
+      doneAt: undefined,
+    };
     const payload: CreateBudgetBody = {};
 
-    jest.spyOn(budgetRepository, 'createBudget').mockImplementation(async () =>
-      Promise.resolve({
-        state: BudgetState.PLANNING,
-        target: undefined,
-        owner_id: user.id,
-        id: randomUUID(),
-        createdAt: new Date(),
-        startAt: undefined,
-        doneAt: undefined,
-      }),
-    );
+    jest
+      .spyOn(budgetRepository, 'createBudget')
+      .mockImplementation(async () => mockBudget);
 
     const budget = await createBudgetUseCase.execute(payload, user);
 

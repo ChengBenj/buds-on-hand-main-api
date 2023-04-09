@@ -1,4 +1,7 @@
 import { randomUUID } from 'crypto';
+
+import prismaServiceMock from '@mocks/services/database/prisma.service';
+
 import { RegisterUserBody } from 'domain/auth/dtos/RegisterUserBody';
 import RegisterUserUseCase from 'domain/auth/useCases/RegisterUser';
 
@@ -18,7 +21,7 @@ describe('Register User', () => {
   let registerUserUseCase: RegisterUserUseCase;
 
   beforeEach(async () => {
-    prismaService = new PrismaService();
+    prismaService = prismaServiceMock();
     hashingService = new HashingBcryptService();
 
     userRepository = new UserRepositoryPrisma(prismaService);

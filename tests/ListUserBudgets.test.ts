@@ -1,5 +1,7 @@
 import { Budget, BudgetState, User } from '@prisma/client';
 
+import prismaServiceMock from '@mocks/services/database/prisma.service';
+
 import { ListUserBudgetFilter } from 'domain/budget/dtos/ListUserBudgetsBody';
 import ListBudgetsUseCase from 'domain/budget/useCases/ListBudgets';
 
@@ -21,7 +23,7 @@ describe('List User Budgets', () => {
   };
 
   beforeEach(async () => {
-    prismaService = new PrismaService();
+    prismaService = prismaServiceMock();
     budgetRepository = new BudgetRepositoryPrisma(prismaService);
     listBudgetsUseCase = new ListBudgetsUseCase(budgetRepository);
   });

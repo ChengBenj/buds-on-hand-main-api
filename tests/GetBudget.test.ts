@@ -1,5 +1,7 @@
 import { Budget, User } from '@prisma/client';
 
+import prismaServiceMock from '@mocks/services/database/prisma.service';
+
 import GetBudgetUseCase from 'domain/budget/useCases/GetBudget';
 
 import BudgetRepository from 'repositories/budgetRepository';
@@ -20,7 +22,7 @@ describe('Get budget', () => {
   };
 
   beforeEach(async () => {
-    prismaService = new PrismaService();
+    prismaService = prismaServiceMock();
     budgetRepository = new BudgetRepositoryPrisma(prismaService);
     getBudgetUseCase = new GetBudgetUseCase(budgetRepository);
   });
