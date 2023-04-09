@@ -1,5 +1,7 @@
 import { Budget, User } from '@prisma/client';
 
+import prismaServiceMock from '@mocks/services/database/prisma.service';
+
 import BudgetRepository from 'repositories/budgetRepository';
 import BudgetRepositoryPrisma from 'repositories/budgetRepositoryPrisma';
 
@@ -19,7 +21,7 @@ describe('Delete Budget', () => {
   };
 
   beforeEach(async () => {
-    prismaService = new PrismaService();
+    prismaService = prismaServiceMock();
     budgetRepository = new BudgetRepositoryPrisma(prismaService);
     deleteBudgetUseCase = new DeleteBudgetUseCase(budgetRepository);
   });

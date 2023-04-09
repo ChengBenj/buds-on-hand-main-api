@@ -1,36 +1,62 @@
+import { randomUUID } from 'crypto';
+
+import prismaServiceMock from '@mocks/services/database/prisma.service';
+
 import { RegisterUserBody } from 'domain/auth/dtos/RegisterUserBody';
 import RegisterUserUseCase from 'domain/auth/useCases/RegisterUser';
 
-import UserRepositoryMemory from 'repositories/userRepositoryMemory';
+import UserRepository from 'repositories/userRepository';
+import UserRepositoryPrisma from 'repositories/userRepositoryPrisma';
 
+import { PrismaService } from 'services/database/prisma.service';
 import HashingBcryptService from 'services/hashing/bcrypt.service';
+import HashingService from 'services/hashing/hashing.service';
 
 describe('Register User', () => {
-  it('Should register user and send register verify email', async () => {
-    const userRepository = new UserRepositoryMemory();
-    const hashingBcryptService = new HashingBcryptService();
-    const registerUserUseCase = new RegisterUserUseCase(
-      userRepository,
-      hashingBcryptService,
-    );
+  let prismaService: PrismaService;
+  let hashingService: HashingService;
 
+  let userRepository: UserRepository;
+
+  let registerUserUseCase: RegisterUserUseCase;
+
+  beforeEach(async () => {
+    prismaService = prismaServiceMock();
+    hashingService = new HashingBcryptService();
+
+    userRepository = new UserRepositoryPrisma(prismaService);
+
+    registerUserUseCase = new RegisterUserUseCase(
+      userRepository,
+      hashingService,
+    );
+  });
+
+  afterAll(() => {
+    jest.clearAllMocks();
+  });
+
+  it('Should register user and send register verify email', async () => {
     const body: RegisterUserBody = {
       name: 'Benjamin Cheng',
       email: 'benjaminscalabrin@gmail.com',
       password: '12345678',
     };
 
+    jest
+      .spyOn(userRepository, 'findByEmail')
+      .mockImplementation(async () => undefined);
+
+    const createFn = jest
+      .spyOn(userRepository, 'create')
+      .mockImplementation(() => undefined);
+
     await registerUserUseCase.execute(body);
+
+    expect(createFn).toHaveBeenCalled();
   });
 
   it('Should throw error when given a duplicate email', async () => {
-    const userRepository = new UserRepositoryMemory();
-    const hashingBcryptService = new HashingBcryptService();
-    const registerUserUseCase = new RegisterUserUseCase(
-      userRepository,
-      hashingBcryptService,
-    );
-
     const body: RegisterUserBody = {
       name: 'Benjamin Cheng',
       email: 'benjaminscalabrin@gmail.com',
@@ -43,7 +69,22 @@ describe('Register User', () => {
       password: '12345678',
     };
 
+    jest
+      .spyOn(userRepository, 'findByEmail')
+      .mockImplementationOnce(async () => undefined);
+
+    jest.spyOn(userRepository, 'create').mockImplementation(() => undefined);
+
     await registerUserUseCase.execute(body);
+
+    jest
+      .spyOn(userRepository, 'findByEmail')
+      .mockImplementationOnce(async () => ({
+        id: randomUUID(),
+        name: 'Benjamin Cheng',
+        email: 'benjaminscalabrin@gmail.com',
+        password: '12345678',
+      }));
 
     expect(() =>
       registerUserUseCase.execute(duplicatedUserBody),
@@ -51,13 +92,6 @@ describe('Register User', () => {
   });
 
   it('Should throw error when email is not valid', () => {
-    const userRepository = new UserRepositoryMemory();
-    const hashingBcryptService = new HashingBcryptService();
-    const registerUserUseCase = new RegisterUserUseCase(
-      userRepository,
-      hashingBcryptService,
-    );
-
     const body: RegisterUserBody = {
       name: 'Benjamin Cheng',
       email: 'benjaminscalabrin@',
@@ -70,13 +104,6 @@ describe('Register User', () => {
   });
 
   it('Should throw error when send empty fields', () => {
-    const userRepository = new UserRepositoryMemory();
-    const hashingBcryptService = new HashingBcryptService();
-    const registerUserUseCase = new RegisterUserUseCase(
-      userRepository,
-      hashingBcryptService,
-    );
-
     const noNameBody: RegisterUserBody = {
       name: undefined,
       email: 'benjaminscalabrin@gmail.com',
@@ -109,13 +136,6 @@ describe('Register User', () => {
   });
 
   it('Should throw error when send empty fields', () => {
-    const userRepository = new UserRepositoryMemory();
-    const hashingBcryptService = new HashingBcryptService();
-    const registerUserUseCase = new RegisterUserUseCase(
-      userRepository,
-      hashingBcryptService,
-    );
-
     const shortPasswordBody: RegisterUserBody = {
       name: 'Benjamin Cheng',
       email: 'benjaminscalabrin@gmail.com',

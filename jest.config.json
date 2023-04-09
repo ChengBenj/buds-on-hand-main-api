@@ -15,6 +15,7 @@
   "coverageDirectory": "../coverage",
   "testEnvironment": "node",
   "moduleNameMapper": {
+    "^@mocks/(.*)$": "<rootDir>../src/@mocks/$1",
     "^services/(.*)$": "<rootDir>../src/services/$1",
     "^domain/(.*)$": "<rootDir>../src/domain/$1",
     "^repositories/(.*)$": "<rootDir>../src/repositories/$1"

@@ -1,6 +1,8 @@
 import { randomUUID } from 'node:crypto';
 import { Budget, BudgetState, User } from '@prisma/client';
 
+import prismaServiceMock from '@mocks/services/database/prisma.service';
+
 import BudgetRepository from 'repositories/budgetRepository';
 import BudgetRepositoryPrisma from 'repositories/budgetRepositoryPrisma';
 
@@ -20,7 +22,7 @@ describe('Create Budget', () => {
   };
 
   beforeEach(async () => {
-    prismaService = new PrismaService();
+    prismaService = prismaServiceMock();
     budgetRepository = new BudgetRepositoryPrisma(prismaService);
     updateBudgetStateUseCase = new UpdateBudgetStateUseCase(budgetRepository);
   });
